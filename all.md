@@ -1,5 +1,6 @@
 [# Pedagogy](https://www.youtube.com/watch?v=zhOl33qIItw&list=PLI-knp71HL3VmW2xLfkql0W82pfuRVcs4&index=10)
 
+
 ctl+shift+ ‘+/-’: zoom in/out terminal 
 Ls -F: show file type, such as file, directory, executable, etc.  *means executable. -sh : human readable file size.
 
@@ -20,6 +21,21 @@ Usermod -a -G  <group1>, <group2> <user1> : add user1 to group1 and group2.  G f
 Newgrp <group1>: switch user’s primary group to group1	
 Chfn <user1>: change user details 
 Deluser <user1>
+Adduser —disabled-password <user1> —gecos “<user1>,<888>,<123>,<567>,<nothing>” &> /dev/null: gecos is to add user details without prompt questions
+Chpasswd: change the password
+“<user1>:<password>” | chpasswd: usually used in shell scripts
+Read -s -p “please, write password for ${USERNAME}” USER_PASS
+-n: check if string is empty. Return true if empty. In shell scripting zero return true, non zero return false
+Echo -e : enable backslash escape character like \n
+if [ -n “${USER_PASS}” ]  
+	then 
+		echo - e “\ncreating user”
+		Adduser —disabled-password <user1> —gecos “<user1>,<888>,<123>,<567>,<nothing>” &> /dev/nul
+		echo “${USERNAME}:${USER_PASS}” | chpasswd
+else 
+	echo -e “\nThe password should be great than zero”
+fi
+
 
 
 Groupmod <group1> -n  <group1renamed>: rename the group
@@ -89,6 +105,7 @@ readonly <var1> <var2>  means var1 and var2 can not be changed/
 overwritten/unset
 readonly <var1=“value”>
 
+Bash/Shell scripting
 ${A}:variable expansion 
 `ls -F` or $(ls -la):command expansion
  $?: status code for the last run command. 0: successfully. 1-255 errors. 127 means command not found
@@ -99,6 +116,9 @@ Test <-f file1>: to test if file1 is file type. -d is directory type.  Test can 
 Use [] to replace test command no difference but [] may not support all operators like &&, ||, >, <,  only support -a, -o and wild card(* ? []), so status code may return success whereas the expression should be evaluated false. -n “string” means to check if the string is empty 
 [[“string” =~ str]]: ~supports regex, means check if str is the substring of string
 [[“string” =~ [^a-z]tring ]]: ^ means the first letter should not from a to z
+$(()) doesn’t support float number, if you calculate float number, you need to use bc. don’t use $ if the variable inside $(())
+g=$(echo “scale=2;17/3” | bc )
+Echo $g
 
 
 
@@ -134,5 +154,3 @@ Sudo chage -l <username>: list info of each field in the shadow file
 Sudo chage <username>: change all the fields in the shadow file
 Sudo chage -E 0 <username>: expire a user account so no matter what he can’t log in.
 Sudo chage -d 0 <username>: expire an user account password. He can reset and still log in.
-
-
